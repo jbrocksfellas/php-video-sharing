@@ -1,0 +1,2 @@
+
+INSERT INTO `videos` (`s.no`, `name`, `description`, `path`, `likes`, `date`) VALUES (NULL, 'third video', 'this is third video', './third.mp4', '5', current_timestamp());
