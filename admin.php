@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="hidden" name="snoEdit" id="snoEdit">
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp">
+                            <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" required>
                         </div>
 
                         <div class="form-group">
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="form-group">
                             <label for="fileEdit">Upload Video</label>
-                            <input type="file" class="form-control" id="fileEdit" name="fileEdit">
+                            <input type="file" class="form-control" id="fileEdit" name="fileEdit" required>
                             <!-- <span><?php echo "sd"; ?></span> -->
                         </div>
                     </div>
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php
     if ($insert) {
         echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-    <strong>Success!</strong> Your note has been inserted successfully
+    <strong>Success!</strong> Your video has been uploaded successfully
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
       <span aria-hidden='true'>×</span>
     </button>
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php
     if ($delete) {
         echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-    <strong>Success!</strong> Your note has been deleted successfully
+    <strong>Success!</strong> Your video has been deleted successfully
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
       <span aria-hidden='true'>×</span>
     </button>
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php
     if ($update) {
         echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-    <strong>Success!</strong> Your note has been updated successfully
+    <strong>Success!</strong> Your video has been updated successfully
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
       <span aria-hidden='true'>×</span>
     </button>
@@ -171,8 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Add a Video</h2>
         <form action="/lbproject/admin.php" method="POST">
             <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+                <label for="title" >Title</label>
+                <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" required>
             </div>
 
             <div class="form-group">
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label for="file">Upload Video</label>
-                <input type="file" class="form-control" id="file" name="file">
+                <input type="file" class="form-control" id="file" name="file" required>
             </div>
             <button type="submit" class="btn btn-primary">Add Video</button>
         </form>
