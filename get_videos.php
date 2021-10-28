@@ -13,11 +13,11 @@ if(isset($_POST['start'])) {
                 '<div class="d-flex flex-column flex-lg-row">
                     <div class="video d-flex flex-column justify-content-center flex-grow-1">
                         <video controls>
-                            <source src="./uploads/mov_bbb.mp4" type="video/mp4">
+                            <source src="./uploads/' . $row['path'] . '" type="video/mp4">
                         </video>
                         <div class="collapse" id=' . $id . '>
                             <div class="card card-body mx-auto">
-                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates teh relevant trigger. 
+                            <h3>' . $row['title'] . '</h3>' . $row['description'] . '
                             </div>
                         </div>
                     </div>       

@@ -3,11 +3,11 @@
 $insert = false;
 $update = false;
 $delete = false;
+$fileTypeError = false;
+$fileSizeError = false;
+$fileUploadingError = false;
+
 $table = "videos";
-$target_dir = "uploads/";
-$target_file = $target_dir . basename($_FILES["file"]["name"]);
-$uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
 // Connect to the Database 
 require('./includes/dbconnection.php');
@@ -29,30 +29,87 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sno = $_POST["snoEdit"];
         $title = $_POST["titleEdit"];
         $description = $_POST["descriptionEdit"];
-        $file = $_POST["fileEdit"];
+        $file = $_FILES['fileEdit'];
+        $fileName = $_FILES['fileEdit']['name'];
+        $fileTmpName = $_FILES['fileEdit']['tmp_name'];
+        $fileSize = $_FILES['fileEdit']['size'];
+        $fileError = $_FILES['fileEdit']['error'];
+        $fileType = $_FILES['fileEdit']['type'];
 
-        // Sql query to be executed
-        $sql = "UPDATE `$table` SET `title` = '$title' , `description` = '$description' , `path` = '$file' WHERE `$table`.`sno` = $sno";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            $update = true;
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+
+        $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
+
+        if(in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0) {
+                if ($fileSize < 500000000) {
+                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                    $fileDestination = 'uploads/' . $fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    // Sql query to be executed
+                    $sql = "UPDATE `$table` SET `title` = '$title' , `description` = '$description' , `path` = '$fileNameNew' WHERE `$table`.`sno` = $sno";
+                    $result = mysqli_query($conn, $sql);
+                    if ($result) {
+                        $update = true;
+                    } else {
+                        echo "We could not update the record successfully";
+                    }
+                } else {
+                    
+                    $fileSizeError = true;
+                }
+
+            } else {
+                
+                $fileUploadingError = true;
+            }
         } else {
-            echo "We could not update the record successfully";
+            
+            $fileTypeError = true;
         }
+
+
     } else {
         $title = $_POST["title"];
         $description = $_POST["description"];
-        $file = $_POST["file"];
 
-        // Sql query to be executed
-        $sql = "INSERT INTO `$table` (`title`, `description`, `path`) VALUES ('$title', '$description', '$file')";
-        $result = mysqli_query($conn, $sql);
+        $file = $_FILES['file'];
+        $fileName = $_FILES['file']['name'];
+        $fileTmpName = $_FILES['file']['tmp_name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileError = $_FILES['file']['error'];
+        $fileType = $_FILES['file']['type'];
 
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
 
-        if ($result) {
-            $insert = true;
+        $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
+
+        if(in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0) {
+                if ($fileSize < 500000000) {
+                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                    $fileDestination = 'uploads/' . $fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    // Sql query to be executed
+                    $sql = "INSERT INTO `$table` (`title`, `description`, `path`) VALUES ('$title', '$description', '$fileNameNew')";
+                    $result = mysqli_query($conn, $sql);
+                    if ($result) {
+                        $insert = true;
+                    } else {
+                        echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
+                    }
+
+                } else {
+                    $fileSizeError = true;
+                }
+
+            } else {
+                $fileUploadingError = true;
+            }
         } else {
-            echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
+            $fileTypeError = true;
         }
     }
 }
@@ -88,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="/lbproject/admin.php" method="POST">
+                <form action="/lbproject/admin.php" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input type="hidden" name="snoEdit" id="snoEdit">
                         <div class="form-group">
@@ -109,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="modal-footer d-block mr-auto">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -117,22 +174,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#"><img src="/crud/logo.svg" height="28px" alt=""></a>
+        <a class="navbar-brand" href="index.php"><img src="static/images/Logo.png" height="28px" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact Us</a>
-                </li>
+
 
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -172,9 +221,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>";
     }
     ?>
+        <?php
+    if ($fileUploadingError) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Error!</strong> There was an error uploading your file
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+    }
+    ?>
+        <?php
+    if ($fileSizeError) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Size!</strong> Your file is too big
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+    }
+    ?>
+        <?php
+    if ($fileTypeError) {
+        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>Error!</strong> File type not supported
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+    }
+    ?>
     <div class="container my-4">
         <h2>Add a Video</h2>
-        <form action="/lbproject/admin.php" method="POST">
+        <form action="/lbproject/admin.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title" >Title</label>
                 <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" required>
@@ -189,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="file">Upload Video</label>
                 <input type="file" class="form-control" id="file" name="file" required>
             </div>
-            <button type="submit" class="btn btn-primary">Add Video</button>
+            <button type="submit" class="btn btn-primary" name="submit">Add Video</button>
         </form>
     </div>
 
