@@ -1,3 +1,13 @@
+video {
+  width: 100%;
+  height: auto;
+}
+
+/* div.container {
+  display: flex;
+  flex-wrap: wrap;
+} */
+
 a.download-now {
   font-size: 10px;
   height: 27px;
@@ -9,17 +19,18 @@ a.download-now {
 }
 
 .golden {
-  color: #fcd234;
+  color: rgb(209, 146, 8);
 }
 
-/* button.heart-icon {
-    color: grey;
+button.heart-icon {
+  color: grey;
+  transition: color 1s linear 1s;
 }
 
 button.half-moon-icon {
-    color: grey
+  color: grey;
+  transition: color 1s linear 1s;
 }
- */
 
 .loader-ellips {
   font-size: 20px; /* change size here */
@@ -79,4 +90,11 @@ button.half-moon-icon {
 .loader-ellips__dot:nth-child(4) {
   animation-name: reveal;
   animation-direction: reverse;
+}
+
+
+@media all and (min-width:1000px) {
+  .video-details {
+    margin-left: 10px;
+  }
 }
