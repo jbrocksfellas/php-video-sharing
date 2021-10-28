@@ -1,5 +1,11 @@
 <?php
 
+session_start();
+if (isset($_SESSION['username'])) {
+    header('Location: admin.php');
+
+}
+
 require('includes/dbconnection.php');
 $table = "user";
 
@@ -7,26 +13,31 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['submit'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
+        // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // echo $hashedPassword;
         $sql = "SELECT * FROM $table WHERE username='$username'";
         $result = mysqli_query($conn, $sql);
         if($result && mysqli_num_rows($result) === 1) {
             $row = mysqli_fetch_assoc($result);
-            if($password === $row["password"]) {
+            if(password_verify($password, $row['password'])) {
                 session_start();
                 $_SESSION['username'] = $username;
-                echo "We have saved your session";
+                header('Location: admin.php');
             } else {
-                echo "password does not match";
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Failed!</strong> Incorrect Credentials
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>';
             }
 
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Failed!</strong> Incorrect Credentials
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
         }
     }
 }
-
-
-
-// verify the user login info
-
 
 ?>
 
