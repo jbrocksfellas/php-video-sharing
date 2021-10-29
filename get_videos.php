@@ -25,7 +25,7 @@ if(isset($_POST['start'])) {
                         <button class="three-dot border-0" type="button" data-bs-toggle="collapse" data-bs-target=#' . $id . ' aria-controls="three-dots"><i class="bi bi-three-dots"></i></button>
                         <button class="heart-icon border-0 mt-3" ><i class="bi bi-heart-fill" ></i></button>
                         <button class="half-moon-icon border-0 mt-3"><i class="bi bi-moon-fill"></i></button>
-                        <a class="btn border-secondary download-now mt-3" role="button" download href=' . "uploads/" . $row["path"] . '><i class="bi bi-download"></i> Download Now</a>
+                        <a class="btn border-secondary download-now mt-3 text-nowrap" role="button" download href=' . "uploads/" . $row["path"] . '><i class="bi bi-download"></i> Download Now</a>
                         <a class="btn btn-sm share-icon mt-3"><i class="bi bi-share-fill"></i></a>
                         <a href="tel:+919625926328" class="btn btn-sm call-icon border-0 mt-3"><i class="bi bi-telephone"></i></a>
                         <a href="https://wa.me/9625926328" class="btn btn-sm whatsapp border-0 mt-3"><i class="bi bi-whatsapp"></i></a>

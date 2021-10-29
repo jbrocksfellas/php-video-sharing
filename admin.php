@@ -2,9 +2,7 @@
 session_start();
 if (isset($_SESSION['username'])) {
     echo "<h4>Welcome " . $_SESSION['username'] . "</h4>";
-
 } else {
-    echo "Please login to continue";
     header('Location: login.php');
 }
 $insert = false;
@@ -26,9 +24,15 @@ if (!$conn) {
 
 if (isset($_GET['delete'])) {
     $sno = $_GET['delete'];
-    $delete = true;
-    $sql = "DELETE FROM `$table` WHERE `sno` = $sno";
-    $result = mysqli_query($conn, $sql);
+    $itemSql = "SELECT * FROM `videos` WHERE sno='$sno'";
+    $itemResult = mysqli_query($conn, $itemSql);
+    if (mysqli_num_rows($itemResult) === 1) {
+        $deletedFile = mysqli_fetch_assoc($itemResult)['path'];
+        $sql = "DELETE FROM `$table` WHERE `sno` = $sno";
+        $result = mysqli_query($conn, $sql);
+        $delete = true;
+        unlink("uploads/$deletedFile");
+    }
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['snoEdit'])) {
@@ -48,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
 
-        if(in_array($fileActualExt, $allowed)) {
+        if (in_array($fileActualExt, $allowed)) {
             if ($fileError === 0) {
                 if ($fileSize < 500000000) {
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
@@ -63,20 +67,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         echo "We could not update the record successfully";
                     }
                 } else {
-                    
+
                     $fileSizeError = true;
                 }
-
             } else {
-                
+
                 $fileUploadingError = true;
             }
         } else {
-            
+
             $fileTypeError = true;
         }
-
-
     } else {
         $title = $_POST["title"];
         $description = $_POST["description"];
@@ -93,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
 
-        if(in_array($fileActualExt, $allowed)) {
+        if (in_array($fileActualExt, $allowed)) {
             if ($fileError === 0) {
                 if ($fileSize < 500000000) {
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
@@ -107,11 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     } else {
                         echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
                     }
-
                 } else {
                     $fileSizeError = true;
                 }
-
             } else {
                 $fileUploadingError = true;
             }
@@ -135,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 
 
-    <title>i$table - $table taking made easy</title>
+    <title>Admin Panel</title>
 
 </head>
 
@@ -229,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>";
     }
     ?>
-        <?php
+    <?php
     if ($fileUploadingError) {
         echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
     <strong>Error!</strong> There was an error uploading your file
@@ -239,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>";
     }
     ?>
-        <?php
+    <?php
     if ($fileSizeError) {
         echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
     <strong>Size!</strong> Your file is too big
@@ -249,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>";
     }
     ?>
-        <?php
+    <?php
     if ($fileTypeError) {
         echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
     <strong>Error!</strong> File type not supported
@@ -263,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Add a Video</h2>
         <form action="/lbproject/admin.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="title" >Title</label>
+                <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" required>
             </div>
 
@@ -281,8 +280,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <div class="container my-4">
-
-
         <table class="table" id="myTable">
             <thead>
                 <tr>
@@ -339,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 descriptionEdit.value = description;
                 // fileEdit.value = file;
                 snoEdit.value = e.target.id;
-                
+
                 console.log(e.target.id)
                 $('#editModal').modal('toggle');
             })
