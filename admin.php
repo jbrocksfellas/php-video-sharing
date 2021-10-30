@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sno = $_POST["snoEdit"];
         $title = $_POST["titleEdit"];
         $description = $_POST["descriptionEdit"];
+        $phone = $_POST["phoneEdit"];
         $file = $_FILES['fileEdit'];
         $fileName = $_FILES['fileEdit']['name'];
         $fileTmpName = $_FILES['fileEdit']['tmp_name'];
@@ -52,19 +53,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
 
-        if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0) {
+        if (in_array($fileActualExt, $allowed) || $fileSize === 0) {
+            if ($fileError === 0 || $fileError === 4) {
                 if ($fileSize < 500000000) {
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = 'uploads/' . $fileNameNew;
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                    // Sql query to be executed
-                    $sql = "UPDATE `$table` SET `title` = '$title' , `description` = '$description' , `path` = '$fileNameNew' WHERE `$table`.`sno` = $sno";
-                    $result = mysqli_query($conn, $sql);
-                    if ($result) {
-                        $update = true;
+                    if ($fileSize > 0) {
+                        $itemSql = "SELECT * FROM `videos` WHERE sno='$sno'";
+                        $itemResult = mysqli_query($conn, $itemSql);
+                        if (mysqli_num_rows($itemResult) === 1) {
+                            $deletedFile = mysqli_fetch_assoc($itemResult)['path'];
+                            unlink("uploads/$deletedFile");
+                        }
+                        $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                        $fileDestination = 'uploads/' . $fileNameNew;
+                        move_uploaded_file($fileTmpName, $fileDestination);
+                        // Sql query to be executed
+                        $sql = "UPDATE `$table` SET `title` = '$title' , `description` = '$description' , `phone` = '$phone' , `path` = '$fileNameNew' WHERE `$table`.`sno` = $sno";
+                        $result = mysqli_query($conn, $sql);
+                        if ($result) {
+                            $update = true;
+                        } else {
+                            echo "We could not update the record successfully";
+                        }
                     } else {
-                        echo "We could not update the record successfully";
+                        $sql = "UPDATE `$table` SET `title` = '$title' , `description` = '$description' , `phone` = '$phone' WHERE `$table`.`sno` = $sno";
+                        $result = mysqli_query($conn, $sql);
+                        if ($result) {
+                            $update = true;
+                        } else {
+                            echo "We could not update the record successfully";
+                        }
                     }
                 } else {
 
@@ -81,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $title = $_POST["title"];
         $description = $_POST["description"];
-
+        $phone = $_POST["phone"];
         $file = $_FILES['file'];
         $fileName = $_FILES['file']['name'];
         $fileTmpName = $_FILES['file']['tmp_name'];
@@ -94,14 +111,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $allowed = array('mp4', '3gp', 'webm', 'mkv', 'flv', 'avi', 'wmv', 'mov', 'ogg');
 
-        if (in_array($fileActualExt, $allowed)) {
+        if (in_array($fileActualExt, $allowed) || $fileSize === 0) {
             if ($fileError === 0) {
                 if ($fileSize < 500000000) {
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
                     $fileDestination = 'uploads/' . $fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
                     // Sql query to be executed
-                    $sql = "INSERT INTO `$table` (`title`, `description`, `path`) VALUES ('$title', '$description', '$fileNameNew')";
+                    $sql = "INSERT INTO `$table` (`title`, `description`, `phone`, `path`) VALUES ('$title', '$description', '$phone', '$fileNameNew')";
                     $result = mysqli_query($conn, $sql);
                     if ($result) {
                         $insert = true;
@@ -155,19 +172,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="modal-body">
                         <input type="hidden" name="snoEdit" id="snoEdit">
                         <div class="form-group">
-                            <label for="title">Title</label>
+                            <label for="titleEdit">Title</label>
                             <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="desc">Description</label>
+                            <label for="descriptionEdit">Description</label>
                             <textarea class="form-control" id="descriptionEdit" name="descriptionEdit" rows="3"></textarea>
                         </div>
 
                         <div class="form-group">
+                            <label for="phoneEdit">Phone No.</label>
+                            <input type="number" class="form-control" id="phoneEdit" name="phoneEdit" aria-describedby="emailHelp" required>
+                        </div>
+
+                        <div class="form-group">
                             <label for="fileEdit">Upload Video</label>
-                            <input type="file" class="form-control" id="fileEdit" name="fileEdit" required>
-                            <!-- <span><?php echo "sd"; ?></span> -->
+                            <input type="file" class="form-control" id="fileEdit" name="fileEdit">
+                            <span id="pathEdit"></span>
                         </div>
                     </div>
                     <div class="modal-footer d-block mr-auto">
@@ -272,6 +294,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group">
+                <label for="phone">Phone No.</label>
+                <input type="number" class="form-control" id="phone" name="phone" aria-describedby="emailHelp" required>
+            </div>
+
+            <div class="form-group">
                 <label for="file">Upload Video</label>
                 <input type="file" class="form-control" id="file" name="file" required>
             </div>
@@ -299,6 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <th scope='row'>" . $sno . "</th>
             <td>" . $row['title'] . "</td>
             <td class='d-none'>" . $row['description'] . "</td>
+            <td class='d-none'>" . $row['phone'] . "</td>
             <td class='d-none'>" . $row['path'] . "</td>
             <td> <button class='edit btn btn-sm btn-primary' id=" . $row['sno'] . ">Edit</button> <button class='delete btn btn-sm btn-primary' id=d" . $row['sno'] . ">Delete</button>  </td>
           </tr>";
@@ -330,14 +358,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 tr = e.target.parentNode.parentNode;
                 title = tr.getElementsByTagName("td")[0].innerText;
                 description = tr.getElementsByTagName("td")[1].innerText;
-                file = tr.getElementsByTagName("td")[2].innerText;
-                console.log(title, description, file);
+                phone = tr.getElementsByTagName("td")[2].innerText;
+                file = tr.getElementsByTagName("td")[3].innerText;
                 titleEdit.value = title;
                 descriptionEdit.value = description;
-                // fileEdit.value = file;
+                phoneEdit.value = phone;
+                pathEdit.innerText = file;
+                console.log(pathEdit, file)
                 snoEdit.value = e.target.id;
-
-                console.log(e.target.id)
                 $('#editModal').modal('toggle');
             })
         })

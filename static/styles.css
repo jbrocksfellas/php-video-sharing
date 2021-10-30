@@ -9,6 +9,15 @@ p.count {
   padding: 0;
 }
 
+i.bi-telephone {
+  color: blue;
+}
+
+i.bi-whatsapp {
+  color: green;
+}
+
+
 
 a.download-now {
   font-size: 10px;
@@ -17,11 +26,11 @@ a.download-now {
 }
 
 .red {
-  color: red;
+  color: red!important;
 }
 
 .golden {
-  color: rgb(209, 146, 8);
+  color: #d19208!important;
 }
 
 button.heart-icon {
