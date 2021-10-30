@@ -21,10 +21,10 @@ if(isset($_POST['start'])) {
                             </div>
                         </div>
                     </div>       
-                    <div class="video-details d-flex flex-sm-row flex-md-row flex-lg-column-reverse justify-content-between mb-2">
+                    <div class="video-details d-flex flex-sm-row flex-md-row flex-lg-column-reverse justify-content-between">
                         <button class="three-dot border-0" type="button" data-bs-toggle="collapse" data-bs-target=#' . $id . ' aria-controls="three-dots"><i class="bi bi-three-dots"></i></button>
-                        <button class="heart-icon border-0 mt-3" ><i class="bi bi-heart-fill" ></i></button>
-                        <button class="half-moon-icon border-0 mt-3"><i class="bi bi-moon-fill"></i></button>
+                        <button class="heart-icon border-0 mt-3" ><i class="bi bi-heart-fill" ></i><p class="count count'. $row['sno'] .'" style="color:grey!important"">'. $row['likes'] .'</p></button>
+                        <button class="half-moon-icon border-0 mt-3"><i class="bi bi-moon-fill"></i><p class="count count'. $row['sno'] .'" style="color:grey!important";>'. $row['likes'] .'</p></button>
                         <a class="btn border-secondary download-now mt-3 text-nowrap" role="button" download href=' . "uploads/" . $row["path"] . '><i class="bi bi-download"></i> Download Now</a>
                         <a class="btn btn-sm share-icon mt-3"><i class="bi bi-share-fill"></i></a>
                         <a href="tel:+919625926328" class="btn btn-sm call-icon border-0 mt-3"><i class="bi bi-telephone"></i></a>
