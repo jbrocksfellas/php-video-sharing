@@ -28,7 +28,7 @@ if(isset($_POST['start'])) {
                         <button class="heart-icon border-0 mt-3"><i class="bi bi-heart-fill" ></i><p class="count" id='. $row['sno'] .' style="color:grey!important">'. $row['likes'] .'</p></button>
                         <button class="half-moon-icon border-0 mt-3"><i class="bi bi-moon-fill"></i><p class="count" id='. $row['sno'] .' style="color:grey!important">'. $row['moons'] .'</p></button>
                         <a class="btn border-secondary download-now mt-3 text-nowrap" role="button" download href=' . "uploads/" . $row["path"] . '><i class="bi bi-download"></i> Download Now</a>
-                        <a class="btn btn-sm share-icon mt-3"><i class="bi bi-share-fill"></i></a>
+                        <a href="sms:/'. $row['phone'] .'" class="btn btn-sm share-icon mt-3"><i class="bi bi-share-fill"></i></a>
                         <a href="tel:'. $row['phone'] .'" class="btn btn-sm call-icon border-0 mt-3"><i class="bi bi-telephone"></i></a>
                         <a href="https://wa.me/'. $row['phone'] .'" class="btn btn-sm whatsapp border-0 mt-3"><i class="bi bi-whatsapp"></i></a>
                     </div>
