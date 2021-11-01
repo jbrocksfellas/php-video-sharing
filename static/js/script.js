@@ -40,9 +40,10 @@ function heartEvent(e) {
   if (e.target.classList.contains("red")) {
     e.target.nextSibling.innerText = Number(e.target.nextSibling.innerText) + 1;
     let formData = new FormData();
-    formData.append("sno", Number(e.target.nextSibling.id));
+    let nextSiblingId = e.target.nextSibling.id;
+    formData.append("sno", Number(nextSiblingId));
     formData.append("likes", Number(e.target.nextSibling.innerText));
-    setCookie("dhabalikes" + e.target.nextSibling.id, null, 2592000);
+    setCookie("dhabalikes" + nextSiblingId, null, 2592000);
     fetch("likes.php", {
       method: "post",
       body: formData,
@@ -52,9 +53,10 @@ function heartEvent(e) {
   } else {
     e.target.nextSibling.innerText = Number(e.target.nextSibling.innerText) - 1;
     let formData = new FormData();
-    formData.append("sno", Number(e.target.nextSibling.id));
+    let nextSiblingId = e.target.nextSibling.id;
+    formData.append("sno", Number(nextSiblingId));
     formData.append("likes", Number(e.target.nextSibling.innerText));
-    setCookie("dhabalikes" + e.target.nextSibling.id, null, -60);
+    setCookie("dhabalikes" + nextSiblingId, null, -60);
     fetch("likes.php", {
       method: "post",
       body: formData,
@@ -69,9 +71,10 @@ function moonEvent(e) {
   if (e.target.classList.contains("golden")) {
     e.target.nextSibling.innerText = Number(e.target.nextSibling.innerText) + 1;
     let formData = new FormData();
-    formData.append("sno", Number(e.target.nextSibling.id));
+    let nextSiblingId = e.target.nextSibling.id;
+    formData.append("sno", Number(nextSiblingId));
     formData.append("moons", Number(e.target.nextSibling.innerText));
-    setCookie("dhabamoons" + e.target.nextSibling.id, null, 2592000);
+    setCookie("dhabamoons" + nextSiblingId, null, 2592000);
     fetch("likes.php", {
       method: "post",
       body: formData,
@@ -81,9 +84,10 @@ function moonEvent(e) {
   } else {
     e.target.nextSibling.innerText = Number(e.target.nextSibling.innerText) - 1;
     let formData = new FormData();
-    formData.append("sno", Number(e.target.nextSibling.id));
+    let nextSiblingId = e.target.nextSibling.id;
+    formData.append("sno", Number(nextSiblingId));
     formData.append("moons", Number(e.target.nextSibling.innerText));
-    setCookie("dhabamoons" + e.target.nextSibling.id, null, -60);
+    setCookie("dhabamoons" + nextSiblingId, null, -60);
     fetch("likes.php", {
       method: "post",
       body: formData,

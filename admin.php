@@ -212,10 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+
             <a href="logout.php" class="btn btn-primary">Logout</a>
         </div>
     </nav>
@@ -386,6 +383,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             })
         })
     </script>
-</body>
-
-</html>
+<?php
+include('includes/footer.php');
+?>

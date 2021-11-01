@@ -1,7 +1,8 @@
 video {
-  width: 100%;
-  height: auto;
+  width: auto;
+  max-height: 75vh;
 }
+
 
 p.count {
   margin: 0;
@@ -11,17 +12,23 @@ p.count {
 
 i.bi-telephone {
   color: blue;
+  font-size: 17px;
 }
 
 i.bi-whatsapp {
   color: green;
+  font-size: 17px;
 }
 
+i.bi-share-fill {
+  font-size: 17px;
+}
 
 
 a.download-now {
   font-size: 10px;
-  height: 27px;
+  height: max-content;
+  padding: auto;
   background-color: #f4c2c2;
 }
 
@@ -34,14 +41,20 @@ a.download-now {
 }
 
 button.heart-icon {
+  background-color: transparent;
   color: grey;
   transition: color 1s linear 1s;
 
 }
 
 button.half-moon-icon {
+  background-color: transparent;
   color: grey;
   transition: color 1s linear 1s;
+}
+
+button.three-dot {
+  background-color: transparent;
 }
 
 .loader-ellips {
@@ -109,4 +122,10 @@ button.half-moon-icon {
   .video-details {
     margin-left: 10px;
   }
+
+  
+  i:not(.bi-download) {
+    font-size: 25px;
+  }
+
 }
