@@ -118,10 +118,23 @@ button.three-dot {
   animation-direction: reverse;
 }
 
+.modal-whatsapp {
+  margin-top: -4px;
+}
+
+.modal-telegram:hover {
+  opacity: 0.7;
+}
+
+.modal-whatsapp:hover {
+  opacity: 0.7;
+}
+
 .fa {
   padding: 20px;
   font-size: 30px;
-  /* width: 50px; */
+  width: 57px;
+  height: 57px;
   text-align: center;
   text-decoration: none;
   margin: 5px 2px;

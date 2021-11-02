@@ -22,10 +22,12 @@ if(isset($_POST['start'])) {
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body d-flex justify-content-center">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://'. $sharePath . $row["path"] .'" class="fa fa-facebook"></a>
-                                <a href="https://twitter.com/intent/tweet?url=https://'. $sharePath . $row["path"] .'" class="fa fa-twitter"></a>
-                                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://'. $sharePath . $row["path"] .'" class="fa fa-linkedin"></a>
-                                <a href="mailto:?&subject=&body=https://'. $sharePath . $row["path"] .'" class="fa fa-google"></a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://'. $sharePath . $row["path"] . "&quote=". $row["title"] .'" class="fa fa-facebook"></a>
+                                <a href="https://twitter.com/intent/tweet?url=https://'. $sharePath . $row["path"] . "&text=". $row["title"] .'" class="fa fa-twitter"></a>
+                                <a href="mailto:?body=https://'. $sharePath . $row["path"] . "&subject=". $row["title"] .'" class="fa fa-google"></a>
+                                <a href="https://t.me/share/url?url=https://'. $sharePath . $row["path"] ."&text=". $row["title"] .'" class="modal-telegram"/><img src="https://img.icons8.com/color/65/000000/telegram-app.png"/></a>
+                                <a href="whatsapp://send?text=https://'. $sharePath . $row["path"] .'" class="modal-whatsapp"/><img src="https://img.icons8.com/color/70/000000/whatsapp--v1.png"/></a>
+                                
                             </div>
                         </div>
                     </div>
